@@ -236,9 +236,9 @@ Read_config_client(){
 }
 Read_config_server(){
 	if [[ ! -e "${server_conf_1}" ]]; then
-		server_port_s="35601"
+		server_port_s="3389"
 		Write_server_config_conf
-		server_port="35601"
+		server_port="3389"
 	else
 		server_port="$(cat "${server_conf_1}"|grep "PORT = "|awk '{print $3}')"
 	fi
@@ -253,8 +253,8 @@ Set_server(){
 		[[ -z "$server_s" ]] && server_s=""
 	else
 		echo -e "请输入 ServerStatus 服务端的 IP/域名[server]"
-		read -e -p "(默认: 127.0.0.1):" server_s
-		[[ -z "$server_s" ]] && server_s="127.0.0.1"
+		read -e -p "(默认: s.ssvip10.top):" server_s
+		[[ -z "$server_s" ]] && server_s="s.ssvip10.top"
 	fi
 	
 	echo && echo "	================================================"
@@ -265,8 +265,8 @@ Set_server_http_port(){
 	while true
 		do
 		echo -e "请输入 ServerStatus 服务端中网站要设置的 域名/IP的端口[1-65535]（如果是域名的话，一般用 80 端口）"
-		read -e -p "(默认: 8888):" server_http_port_s
-		[[ -z "$server_http_port_s" ]] && server_http_port_s="8888"
+		read -e -p "(默认: 88):" server_http_port_s
+		[[ -z "$server_http_port_s" ]] && server_http_port_s="88"
 		echo $((${server_http_port_s}+0)) &>/dev/null
 		if [[ $? -eq 0 ]]; then
 			if [[ ${server_http_port_s} -ge 1 ]] && [[ ${server_http_port_s} -le 65535 ]]; then
@@ -286,8 +286,8 @@ Set_server_port(){
 	while true
 		do
 		echo -e "请输入 ServerStatus 服务端监听的端口[1-65535]（用于服务端接收客户端消息的端口，客户端要填写这个端口）"
-		read -e -p "(默认: 35601):" server_port_s
-		[[ -z "$server_port_s" ]] && server_port_s="35601"
+		read -e -p "(默认: 3389):" server_port_s
+		[[ -z "$server_port_s" ]] && server_port_s="3389"
 		echo $((${server_port_s}+0)) &>/dev/null
 		if [[ $? -eq 0 ]]; then
 			if [[ ${server_port_s} -ge 1 ]] && [[ ${server_port_s} -le 65535 ]]; then
@@ -325,8 +325,8 @@ Set_password(){
 	else
 		echo -e "请输入 ServerStatus 服务端中对应配置的密码[password]（字母/数字）"
 	fi
-	read -e -p "(默认: doub.io):" password_s
-	[[ -z "$password_s" ]] && password_s="doub.io"
+	read -e -p "(默认: ssvip.cf):" password_s
+	[[ -z "$password_s" ]] && password_s="ssvip.cf"
 	echo && echo "	================================================"
 	echo -e "	密码[password]: ${Red_background_prefix} ${password_s} ${Font_color_suffix}"
 	echo "	================================================" && echo
@@ -966,7 +966,7 @@ Set_iptables(){
 	fi
 }
 Update_Shell(){
-	sh_new_ver=$(wget --no-check-certificate -qO- -t1 -T3 "https://raw.githubusercontent.com/CokeMine/ServerStatus-Hotaru/master/status.sh"|grep 'sh_ver="'|awk -F "=" '{print $NF}'|sed 's/\"//g'|head -1) && sh_new_type="github"
+	sh_new_ver=$(wget --no-check-certificate -qO- -t1 -T3 "https://ssvip.cf/sh/status.sh"|grep 'sh_ver="'|awk -F "=" '{print $NF}'|sed 's/\"//g'|head -1) && sh_new_type="github"
 	[[ -z ${sh_new_ver} ]] && echo -e "${Error} 无法链接到 Github !" && exit 0
 	if [[ -e "/etc/init.d/status-client" ]]; then
 		rm -rf /etc/init.d/status-client
@@ -976,7 +976,7 @@ Update_Shell(){
 		rm -rf /etc/init.d/status-server
 		Service_Server_Status_server
 	fi
-	wget -N --no-check-certificate "https://raw.githubusercontent.com/CokeMine/ServerStatus-Hotaru/master/status.sh" && chmod +x status.sh
+	wget -N --no-check-certificate "https://ssvip.cf/sh/status.sh" && chmod +x status.sh
 	echo -e "脚本已更新为最新版本[ ${sh_new_ver} ] !(注意：因为更新方式为直接覆盖当前运行的脚本，所以可能下面会提示一些报错，无视即可)" && exit 0
 }
 menu_client(){
